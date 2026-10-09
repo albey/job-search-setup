@@ -21,7 +21,9 @@ Requirements:
 Routine prompt:
 
 ```
-Run the {{WATCH}} skill. This is an unattended run: for the email check, apply only the
+Run the {{WATCH}} skill. This is an unattended run: ending your turn ends the run, so don't
+stop while a command is still running in the background; wait for it and finish every step,
+including the commit and push. For the email check, apply only the
 clear-cut status changes the skill allows, and never send, reply to, draft or label email.
 Then commit the changes to .claude/skills/{{WATCH}}/state.json, .claude/skills/{{WATCH}}/applied.json
 and {{DATA}}/Job-Watch.md (and {{DATA}}/Applications.md if the email check changed it) with the

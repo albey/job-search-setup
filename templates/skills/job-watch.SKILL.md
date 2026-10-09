@@ -27,6 +27,8 @@ Files in this skill:
 python3 .claude/skills/{{WATCH}}/scripts/job_watch.py fetch
 ```
 
+Run it as its own Bash call with the Bash `timeout` set to 600000 (10 minutes): rate-limit backoff and the one-at-a-time Workable boards can push it past the 2-minute default. If it still gets moved to the background, wait for it to finish and keep working in the same turn. Never end the turn while it's running: in a scheduled run, ending the turn ends the run and nothing gets saved or committed.
+
 Run from the workspace root. It prints JSON with `new` (roles first seen today, excluding tracked ones), `open_matches`, `errors` (boards that failed) and `web_check` (companies to check by hand in Step 2, including failed boards), and re-renders the note.
 
 ## Step 2: Web-check the `web` companies
