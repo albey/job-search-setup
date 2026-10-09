@@ -1,6 +1,6 @@
 ---
 name: {{WATCH}}
-description: Check the career pages of {{USER}}'s target companies for new roles matching their search ({{SEARCH_SUMMARY}}) and update the Job Watch note. Use when {{USER}} says "run job watch", "check for new jobs", "any new roles?", "check the career pages", or invokes /{{WATCH}}. Also run by the scheduled routine.
+description: Check the career pages of {{USER}}'s target companies for new roles matching their search ({{SEARCH_SUMMARY}}) and update the Job Watch note. When email is connected, also checks recent mail for news on tracked applications (rejections, interview invites, offers) and updates the tracker when a status has clearly moved. Use when {{USER}} says "run job watch", "check for new jobs", "any new roles?", "check the career pages", or invokes /{{WATCH}}. Also run by the scheduled routine.
 ---
 
 # Job Watch
@@ -18,6 +18,8 @@ Files in this skill:
 - `applied.json`: snapshot of the application tracker. Roles matching a tracker row go to an "In your tracker" section, never reported as new.
 
 {{WATCH_TRACKER_SYNC}}
+
+{{WATCH_EMAIL_CHECK}}
 
 ## Step 1: Fetch the API-backed boards
 
@@ -57,6 +59,7 @@ python3 .claude/skills/{{WATCH}}/scripts/job_watch.py webdone --count <n>
 ## Step 3: Report
 
 Give {{USER}} a short summary:
+{{WATCH_EMAIL_REPORT}}
 - New roles this run, senior ones first: company, title, location, link.
 - One line on open roles already in the tracker. Flag any tracker row still `Applied` or `Interviewing` whose posting has moved to "Recently closed".
 - Total open matches.

@@ -5,7 +5,7 @@ A [Claude Code](https://claude.com/claude-code) skill that sets up a personal jo
 | Skill | You say | It does |
 |---|---|---|
 | **company-fit** | "Should I apply to Acme?" | Researches what the company does, how it's doing and where it's heading, what it hires for, and scores it against *your* ranked priorities. Ends with Apply / Wait / Skip. |
-| **job-watch** | "Any new roles?" (or runs on a schedule) | Checks the careers pages of your target companies (30–150, researched with you during setup) for roles matching your titles and locations, and lists what's new. |
+| **job-watch** | "Any new roles?" (or runs on a schedule) | Checks the careers pages of your target companies (30–150, researched with you during setup) for roles matching your titles and locations, and lists what's new. With email connected, each run also checks for replies and moves a tracker status when it's unambiguous (rejection, interview invite, offer), flagging everything else for you. |
 | **job-tracker** | "I applied for this: <link>" · "Had a recruiter call with Acme" · "Any replies?" · "Where am I?" | Keeps your application tracker (Google Sheet or markdown file) current, scans your email for replies if connected, and gives you a pipeline view and a follow-up list. |
 | **interview-prep** | "Prep me for my interview with Acme" | Builds a prep pack from the job description, the company's culture and values pages and your own stories, then runs a mock interview one question at a time with scored feedback. Debriefs the real interview afterwards. |
 

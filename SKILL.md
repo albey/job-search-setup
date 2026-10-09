@@ -72,7 +72,7 @@ Write these into `Profile.md` from `templates/Profile.template.md`.
 - **Google Sheet**: needs the Google Sheets connector to write (Drive alone can only read). An existing sheet: get the link, read the header row, and map its columns to the standard ones in `references/tracker.md` (keep their headers; only add missing columns with their OK). A new sheet: create it with the standard header.
 - **Markdown file** (`Applications.md` in the data folder): no connector needed, works offline and in scheduled cloud runs, readable in Obsidian or any editor.
 If they have past applications anywhere (a spreadsheet, a list, emails), offer to import them now.
-Then ask about email: if Gmail or Outlook is connected, the tracker's clean-up mode can scan for replies. If not, it works from what the user tells it.
+Then ask about email: if Gmail or Outlook is connected, the tracker's clean-up mode can scan for replies, and every job-watch run (including scheduled ones) can check recent mail and move a status on its own when the email is unambiguous: rejection, interview invite, offer. Ask whether they want that automatic update in job-watch; if not, leave it to the tracker's clean-up. If no email is connected, the tracker works from what the user tells it.
 
 **F. Interview prep.** Ask:
 - Mock interviewer style: realistic (stays in character, feedback at the end) or coaching (feedback after every answer).
@@ -114,6 +114,7 @@ For each skill the user chose, write `<workspace root>/.claude/skills/<name>/SKI
 | `{{FIT}}`, `{{WATCH}}`, `{{TRACKER}}`, `{{PREP}}` | The final skill names from Step 1 |
 | `{{TRACKER_SPEC}}`, `{{TRACKER_READ}}`, `{{TRACKER_WRITE}}`, `{{WATCH_TRACKER_SYNC}}` | The blocks for the chosen backend in `references/tracker.md`, with the sheet ID, link and tab filled in |
 | `{{EMAIL_STEP}}` | The block for the connected email tool in `references/tracker.md`, or the paste-in block |
+| `{{WATCH_EMAIL_CHECK}}`, `{{WATCH_EMAIL_REPORT}}` | The job-watch email blocks in `references/tracker.md` if the user wants automatic updates from email (Step 2E); otherwise nothing. Fill the nested `{{TRACKER_READ}}` and `{{TRACKER_WRITE}}` inside them too |
 | `{{WEB_QUERY}}` | The web-check search for job-watch: `<Company> (<3–5 title phrases, quoted, OR'd>) job <place> OR remote` |
 | `{{TITLE_CRITERIA}}`, `{{LOCATION_CRITERIA}}` | The plain-English rules from Step 2D |
 | `{{MOCK_STYLE}}` | `realistic` or `coaching`, from Step 2F |

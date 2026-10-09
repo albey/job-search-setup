@@ -16,14 +16,18 @@ Runs in Anthropic's cloud on a schedule, so the computer can be off. Uses the `s
 Requirements:
 - The workspace is a git repo pushed to GitHub, **private**: the profile and tracker are personal. The generated skills in `.claude/skills/` and the data folder must be committed.
 - A Google Sheet tracker needs the Google Sheets connector attached to the routine. A markdown tracker needs nothing.
+- The email check needs the Gmail (or Outlook) connector attached to the routine. Without it, the run skips that step and says so.
 
 Routine prompt:
 
 ```
-Run the {{WATCH}} skill. Then commit the changes to .claude/skills/{{WATCH}}/state.json,
-.claude/skills/{{WATCH}}/applied.json and {{DATA}}/Job-Watch.md with the message
-"{{WATCH}}: scheduled run <YYYY-MM-DD>" and push to the default branch.
-If there are new roles, put them in the commit message body, one per line.
+Run the {{WATCH}} skill. This is an unattended run: for the email check, apply only the
+clear-cut status changes the skill allows, and never send, reply to, draft or label email.
+Then commit the changes to .claude/skills/{{WATCH}}/state.json, .claude/skills/{{WATCH}}/applied.json
+and {{DATA}}/Job-Watch.md (and {{DATA}}/Applications.md if the email check changed it) with the
+message "{{WATCH}}: scheduled run <YYYY-MM-DD>" and push to the default branch.
+In the commit message body, list new roles one per line, then each tracker change from email
+(company, role, old -> new status, evidence) so there's a record to revert from.
 ```
 
 The user sees results after `git pull`, or in Obsidian with the Git plugin's auto-pull. Make sure local edits are committed regularly so the routine's pushes don't conflict.
@@ -38,7 +42,7 @@ Runs Claude Code headless on this computer. The computer must be on (macOS `laun
    "WebSearch", "WebFetch",
    "Edit({{DATA}}/**)", "Write({{DATA}}/**)"
    ```
-   plus the Google Sheets `get_values` tool name if the tracker is a sheet.
+   plus the Google Sheets `get_values` and `update_values` tool names if the tracker is a sheet, and the email connector's search and read tools (Gmail `search_threads` and `get_thread`) if the email check is on. Never allow send, draft or label tools.
 2. Find the full path of the `claude` binary (`command -v claude`).
 3. macOS: write `~/Library/LaunchAgents/com.<user>.job-watch.plist`:
    ```xml

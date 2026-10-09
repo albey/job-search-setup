@@ -119,3 +119,58 @@ Search Outlook mail for each company, in parallel, using the connected Outlook/M
 ```markdown
 No email connector is set up. Ask {{USER}} to paste or summarise any replies they've had since the last clean-up (one line per company is enough). If they later connect Gmail or Outlook, re-run `/job-search-setup` or ask Claude to add an email step here.
 ```
+
+---
+
+## Job-watch email check
+
+### {{WATCH_EMAIL_CHECK}}: with an email connector
+
+Paste this into job-watch when Gmail or Outlook is connected. Use the Gmail or Outlook search wording from `{{EMAIL_STEP}}` above for the tool names.
+
+```markdown
+## Step 0b: Check email for application news
+
+This often runs unattended on a schedule, so it applies only clear-cut changes and leaves everything else for {{USER}}. It needs the <Gmail / Outlook> connector (load it with ToolSearch if deferred). If it isn't available, skip this step and say so in one line of the report.
+
+**Window:** mail since the day before the previous run (the last `runs` date in `.claude/skills/{{WATCH}}/state.json`), or the last 14 days if there's no previous run.
+
+**Rows in scope:** every tracker row whose Status isn't `Rejected`, `Withdrawn` or `Offer`, including rows with an empty status. {{TRACKER_READ}}
+
+1. **Search**, in parallel:
+   - One search per in-scope company: the company name, plus its domain where known, since the window start.
+   - One sweep of job-board senders, which often send rejections from no-reply addresses that don't name the company: `greenhouse.io`, `ashbyhq.com`, `lever.co`, `myworkday.com`, `smartrecruiters.com`, `workablemail.com`, `teamtailor.com`, `pinpointhq.com`, `linkedin.com`.
+   Open the matching messages. Ignore job alerts, newsletters and marketing.
+2. **Match** each relevant email to one row by company, and by role title when the company has several rows. If it's unclear which row, change nothing and list it under "Needs you".
+3. **Classify and apply.** Only these moves happen automatically, and only when the email says so explicitly:
+
+   | Email says | New Status | Allowed from |
+   |---|---|---|
+   | Rejection: "not moving forward", "pursuing other candidates", "position filled" | `Rejected` | empty, `Saved`, `Applied`, `Interviewing` |
+   | Interview invite, scheduling link, a booked call with a recruiter or hiring manager | `Interviewing` (and Stage) | empty, `Saved`, `Applied` |
+   | Written offer, or a verbal offer confirmed in writing | `Offer` | empty, `Applied`, `Interviewing` |
+
+   For each change, prepend a short dated entry to Notes, keeping what's there (`2026-10-09: rejected after hiring manager round (email from Jane Doe); `), and set Last Update to today. When the row is already `Interviewing` and a new round is booked, update only Stage, Notes and Last Update.
+   Never move a status backwards. Never change Role, Company, Date Applied, Pay, Work Mode or Link. Never add or delete rows.
+4. **Leave for {{USER}}** (no change, list in the report under "Needs you"): "thanks for applying" confirmations, recruiters asking for information or availability, anything waiting on {{USER}}'s reply, emails from companies with no tracker row (new recruiter outreach), and anything ambiguous.
+5. **Write safely.**
+{{TRACKER_WRITE}}
+   Locate rows again by company and role right before writing, not by position from the first read.
+6. **Never** send, reply to, draft, label, archive or mark as read any email.
+
+If this step changed the tracker, sync it again before Step 1 so the snapshot is current (a markdown tracker is re-read by `fetch` automatically).
+```
+
+### {{WATCH_EMAIL_CHECK}}: no email connector
+
+Replace the placeholder with nothing.
+
+### {{WATCH_EMAIL_REPORT}}
+
+With an email connector:
+
+```markdown
+- **Tracker updates** from Step 0b: each change as company, role, old → new status, and evidence (sender, date, one-line gist), so {{USER}} can revert any that are wrong. Then **Needs you**: emails awaiting a reply, interviews to schedule, recruiter outreach from companies not in the tracker, and anything ambiguous. Say "no application news" if there was none, or that the email check was skipped and why.
+```
+
+Without one: replace the placeholder with nothing.
